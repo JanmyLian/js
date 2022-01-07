@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>111</title>
+</head>
+<body>
+    <div onclick="test()">222</div>
+    <script>
+        function test(){
+            window.open ('http://baidu.com', 'newwindow', 'height=500, width=600, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no');
+        }
+        // 第一次
+        // function calcSumFromAtoB(a, b){
+        //     console.log(arguments); // 类数组对象
+        //     for(var i = a, sum = 0; i <= b; i++){
+        //         sum += i;
+        //     }
+        //     return sum;
+        // }
+        // var c = calcSumFromAtoB(1, 10) + calcSumFromAtoB(5, 12) + calcSumFromAtoB(14, 35)
+        // console.log(c)
+
+        // 第二次
+        // function calcSumFromAtoB(){
+        //     var a = arguments[0], b = arguments[1];
+        //     for(var i = a, sum = 0; i <= b; i++){
+        //         sum += i;
+        //     }
+        //     return sum;
+        // }
+        // var c = calcSumFromAtoB(1, 10) + calcSumFromAtoB(5, 12) + calcSumFromAtoB(14, 35)
+        // console.log(c)
+
+        // 遇见return即退出函数
+        // function fun(){
+        //     console.log('A');
+        //     return 'B';
+        //     console.log('C');
+        // }
+        // console.log(1);
+        // var char = fun();
+        // console.log(char);
+        // console.log(2);
+
+        // 函数算法题 - 寻找喇叭花树
+        // 计算一个数字的阶乘
+        // function factorial(n){
+        //     // 累乘器
+        //     var result = 1;
+        //     for(var i = 1; i <= n; i++){
+        //         result *= i;
+        //     }
+        //     return result;
+        // }
+        // 计算100到999内，分别个十百计算数字的阶乘，取出总和等于自己的值的数字
+        // 穷举法
+        // var result = [];
+        // for(var i = 100; i <= 999; i++){
+        //     var iStr = i.toString();
+        //     var a = Number(iStr[0]);
+        //     var b = Number(iStr[1]);
+        //     var c = Number(iStr[2]);
+        //     if(factorial(a) + factorial(b) + factorial(c) === i){
+        //         result.push(i);
+        //     }
+        // }
+        // console.log(result);
+
+        // 函数是js一等公民，它可以被当作参数传入另一个函数
+        // 排序算法题
+        // var arr = [33,22,55,11];
+        // arr.sort(function(a, b){
+        //     // if(a > b){
+        //     //     return 1;
+        //     // }else{
+        //     //     return -1;
+        //     // }
+        //     // return a - b; // 从小到大
+        //     return b - a; // 从大到小
+        // });
+        // console.log(arr);
+
+        // 递归：递归体 + 递归出口（边界）
+        // function factorial(n){
+        //     if(n == 1) return 1; // 边界
+        //     return n * factorial(n - 1); // 递归体
+        // }
+        // console.log(factorial(10));
+
+        // 斐波那契数列
+        // var arr = [1,1,2,3,5,8,13,21];
+        // function fib(ind){
+        //     if(ind == 0 || ind == 1) return 1;
+        //     return fib(ind - 1) + fib(ind - 2);
+        // }
+        // console.log(fib(7));
+
+        // 小慕一开始薪资1万，每年涨5%，20年后工资为？
+        // function money(year){
+        //     if(year == 1) return 10000;
+        //     return money(year - 1) + ( money(year - 1) * 5/100 )
+        // }
+        // console.log(money(20));
+
+        // 数组/对象深拷贝
+        // function copy(arr){
+        //     if(arr.length === 0) return [];
+        //     var newArr = [];
+        //     for(var i = 0; i < arr.length; i++){
+        //         if(typeof arr[i] === 'number'){
+        //             newArr.push(arr[i]);
+        //         }else if(typeof arr[i] === 'object'){
+        //             newArr.push(copy(arr[i]));
+        //         }
+        //     }
+        //     return newArr;
+        // }
+        // var arr = [2,33,[55,66],77];
+        // var copyArr = copy(arr);
+        // arr[2].push(88);
+        // console.log(copyArr);
+
+        // mixin
+        let eventMixin = {
+            /**
+             * 订阅事件，用法：
+             *  menu.on('select', function(item) { ... }
+             */
+            on(eventName, handler) {
+                if (!this._eventHandlers) this._eventHandlers = {};
+                if (!this._eventHandlers[eventName]) {
+                this._eventHandlers[eventName] = [];
+                }
+                this._eventHandlers[eventName].push(handler);
+            },
+
+            /**
+             * 取消订阅，用法：
+             *  menu.off('select', handler)
+             */
+            off(eventName, handler) {
+                let handlers = this._eventHandlers?.[eventName];
+                if (!handlers) return;
+                for (let i = 0; i < handlers.length; i++) {
+                if (handlers[i] === handler) {
+                    handlers.splice(i--, 1);
+                }
+                }
+            },
+
+            /**
+             * 生成具有给定名称和数据的事件
+             *  this.trigger('select', data1, data2);
+             */
+            trigger(eventName, ...args) {
+                if (!this._eventHandlers?.[eventName]) {
+                    return; // 该事件名称没有对应的事件处理程序（handler）
+                }
+
+                // 调用事件处理程序（handler）
+                this._eventHandlers[eventName].forEach(handler => handler.apply(this, args));
+            }
+        }
+        class Menu {
+            choose(value){
+                this.trigger("select", value);
+            }
+        }
+        Object.assign(Menu.prototype, eventMixin);
+        let menu = new Menu();
+        menu.on("select", value => console.log(value));
+        menu.choose('123');
+    </script>
+</body>
+</html>
