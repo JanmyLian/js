@@ -26,9 +26,9 @@
     <div id="container"></div>
     <script>
         // 1. let和const对变量的声明
-        var div, container = document.getElementById("container");
+        var div, container = document.getElementById("container")
         for(let i = 0; i < 5; i++){
-            div = document.createElement("div");
+            div = document.createElement("div")
             div.onclick = function(){
                 alert(i)
             }
@@ -41,12 +41,43 @@
             <section>
                 <head>${title}</head> 
             </section>
-        `;
-        // 2. 默认参数
+        `
+        // 3. 默认参数
+
         function logActivity(name="wendy", activity="coding"){
-            console.log(`${name} loves ${activity}`);
+            console.log(`${name} loves ${activity}`)
         }
         logActivity()
+
+        // 4. 箭头函数
+        var oldfun = function(name){
+            return `${name}`
+        }
+        console.log(oldfun("wendy"))
+        var newfun = name => `${name}`
+        console.log(newfun("wendy"))
+
+        // 箭头函数this指向易错demo
+        var tahoe = {
+            resorts: ["wendy","xiaoming"],
+            // print: (delay=1000) => {//这里this指向window对象 ？
+            print: function(delay=1000) {//这里this指向tahoe对象？                
+                // setTimeout(function(){// 这里this指代window对象，所以会报错
+                setTimeout(()=>{// 用箭头函数的语法限定this的作用域
+                    console.log(this.resorts.join(",")) 
+                },delay)
+            }
+        }
+        tahoe.print()
+
+        // 对this的思考与探索《你不知道的Js第二部分》见testjs/this
+        
+        // 5. ES6的对象和数组
+        // 5.1 解构赋值
+        // 5.2 对象语义增强
+        // 5.3 扩展运算符（拷贝数组，原数组完好无损）
+
+
     </script>
 </body>
 </html>
